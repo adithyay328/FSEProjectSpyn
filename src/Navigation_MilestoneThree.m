@@ -18,24 +18,19 @@ InitKeyboard();
 myev3 = brick;
 class(brick)
 
-%brick.playTone(100, 800, 500);
-
-%v = myev3.GetBattVoltage();
-
-%colorSens = colorSensor("ROCKET", 3);
-distance = brick.UltrasonicDist(SensorPort);
-
-if distance < 10
-    disp("YOU ARE REALLY CLOSE TO ME");
+while 2 > 1
+    %3 refers to port 3. Also, the unit returned is in centimeters
+    distance = brick.UltrasonicDist(3)
+    if distance < 10
+        disp("YOU ARE REALLY CLOSE TO ME");
+    end
 end
 
 brick.SetColorMode(1, 4);
 
 while 2 > 1
-    color_rgb = brick.ColorRGB(1);
-    %fprintf("\tRed %d\n", color_rgb(1));
-    %fprintf("\tGreen %d\n", color_rgb(2));
-    %fprintf("\tBlue %d\n", color_rgb(3));
+    %Returns a tuple with r g and b values
+    color_rgb = brick.ColorRGB(4);
     
     red = color_rgb(1);
     green = color_rgb(2);
