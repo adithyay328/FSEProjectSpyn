@@ -27,7 +27,7 @@ class(brick)
 brick.SetColorMode(1, 4);
 
 while 2 > 1
-    color_rgb = brick.ColorRGB(1);
+    color_rgb = brick.ColorRGB(4);
     %fprintf("\tRed %d\n", color_rgb(1));
     %fprintf("\tGreen %d\n", color_rgb(2));
     %fprintf("\tBlue %d\n", color_rgb(3));
