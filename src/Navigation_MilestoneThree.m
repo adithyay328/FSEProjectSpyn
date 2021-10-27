@@ -23,8 +23,7 @@ class(brick)
 %v = myev3.GetBattVoltage();
 
 %colorSens = colorSensor("ROCKET", 3);
-ultrasonicsensor = sonicSensor(brick, 3);
-distance = readDistance(ultrasonicsensor);
+distance = brick.UltrasonicDist(SensorPort);
 
 if distance < 10
     disp("YOU ARE REALLY CLOSE TO ME");
