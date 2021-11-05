@@ -1,3 +1,12 @@
+import Brick.*;
+import keyboard.*;
+import colorSensor.*;
+import bluetooth.*;
+import wfBrickIO.*;
+import usbBrickIO.*;
+
+brick = ConnectBrick("ROCKET")
+
 brick.ResetMotorAngle('A');
 RelError = 0;
 angle = 0;
@@ -9,7 +18,7 @@ for i=1:10
     RelError = RelError + abs(90-angle);
     brick.ResetMotorAngle('A');
 end
-display('Relative Error:');
+disp('Relative Error:');
 disp(RelError/10);
 
 brick.ResetMotorAngle('A');
@@ -23,5 +32,5 @@ for i=1:10
     AbsError = AbsError + brick.GetMotorAngle('A');
     brick.ResetMotorAngle('A');
 end
-display('Absolute Error:');
+disp('Absolute Error:');
 disp(AbsError/10);
