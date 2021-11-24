@@ -1,4 +1,4 @@
-brick.MoveMotorAngleRel('C', 50, 50, 'Coast');
+brick.SetColorMode(2, 2);
 
 %Main robot loop
 while 2 > 1
@@ -7,6 +7,19 @@ while 2 > 1
     %While we're going in a straight line
     while brick.TouchPressed(1) == 0 || brick.TouchPressed(3) == 0
         moveForward(brick, 1);
+        
+        %At every red, do a minor correction to the left
+        if brick.ColorCode(2) == 5 
+            brick.StopMotor('A');
+            brick.StopMotor('B');
+            pause(2);
+            
+            brick.MoveMotorAngleRel('B', 50, 75, 'Coast');
+            pause(1);
+            
+            brick.StopMotor('A');
+            brick.StopMotor('B');
+        end
     end
     
     disp("Wall detected.");
@@ -48,7 +61,7 @@ while 2 > 1
     brick.GyroCalibrate(4);
     pause(0.5);
     
-    for i = 1:10
+    for i = 1:8
         %Moving forward step by step, seeing if we hit a nearby wal
         %brick.MoveMotorAngleRel('A', 50, 20, 'Coast');
         %brick.MoveMotorAngleRel('B', 50, 20, 'Coast');        
@@ -111,7 +124,7 @@ function moveForward(brick, DIRECTION)
         %correction only runs once every couple loops
         PERCENTCHANCEOFERRORCORRECTION = 20;
         
-        FORWARDSPEED = 30;
+        FORWARDSPEED = 50;
         
         if rand() * 100 > (100 - PERCENTCHANCEOFERRORCORRECTION)
             error = brick.GyroAngle(4);
