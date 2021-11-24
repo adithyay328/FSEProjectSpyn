@@ -48,7 +48,7 @@ while 2 > 1
     brick.GyroCalibrate(4);
     pause(0.5);
     
-    for i = 1:20
+    for i = 1:10
         %Moving forward step by step, seeing if we hit a nearby wal
         %brick.MoveMotorAngleRel('A', 50, 20, 'Coast');
         %brick.MoveMotorAngleRel('B', 50, 20, 'Coast');        
@@ -141,8 +141,8 @@ function alignWithWall(brick)
     if brick.TouchPressed(1) == 1
         disp("A side isn't touching, but B is");
         while brick.TouchPressed(3) == 0 %&& posixtime() - currentTimeUnixEpoch < 7
-            brick.MoveMotor('B', -20);
-            brick.MoveMotor('A', 15)
+            brick.MoveMotor('B', 20);
+            brick.MoveMotor('A', -15)
             pause(0.5);
 
             %Making sure we're stationary
@@ -168,8 +168,8 @@ function alignWithWall(brick)
     elseif brick.TouchPressed(1) == 3 %&& posixtime() - currentTimeUnixEpoch < 7
         disp("B side isn't touching, but A is");
         while brick.TouchPressed(1) == 0
-            brick.MoveMotor('A', -10);
-            brick.MoveMotro('B', 15);
+            brick.MoveMotor('A', 20);
+            brick.MoveMotro('B', -15);
             pause(0.5);
 
             brick.StopMotor('A');
