@@ -13,7 +13,7 @@ while 2 > 1
         
         %We don't want to run this every time, so the actual error
         %correction only runs once every couple loops
-        PERCENTCHANCEOFERRORCORRECTION = 20;
+        PERCENTCHANCEOFERRORCORRECTION = 10;
         
         FORWARDSPEED = 30;
         
@@ -46,63 +46,49 @@ while 2 > 1
     pause(1.5);
     
     %Moving back a bit
-    brick.MoveMotorAngleRel('A', -25, 75, 'Coast');
-    brick.MoveMotorAngleRel('B', -25, 75, 'Coast');
+    brick.MoveMotorAngleRel('A', -25, 50, 'Coast');
+    brick.MoveMotorAngleRel('B', -25, 50, 'Coast');
     
-    pause(2);
-    
-    if(brick.GyroAngle(4) > 5)
-        %If A-side isn't touching the wall just yet, but B is
-        if brick.TouchPressed(1) == 1
-            disp("A side isn't touching, but B is");
-            while brick.TouchPressed(3) == 0
-                brick.MoveMotor('B', -5);
-                pause(0.5);
-                
-                brick.StopMotor('B');
-                pause(0.5);
-                
-                brick.MoveMotor('A', 15);
-                brick.MoveMotor('B', 15);
-            end
-
-            brick.StopMotor('A');
-            brick.StopMotor('B');
-
-            pause(1.5);
-        %Otherwise, A is touching the wall
-        else
-            disp("B side isn't touching, but A is");
-            while brick.TouchPressed(1) == 0
-                brick.MoveMotor('A', -5);
-                pause(0.5);
-                
-                brick.StopMotor('A');
-                pause(0.5);
-                
-                brick.MoveMotor('A', 15);
-                brick.MoveMotor('B', 15);
-            end
-
-            brick.StopMotor('A');
-            brick.StopMotor('B');
-
-            pause(1.5);
+    %If A-side isn't touching the wall just yet, but B is
+    if brick.TouchPressed(1) == 1
+        disp("A side isn't touching, but B is");
+        while brick.TouchPressed(3) == 0
+            brick.MoveMotor('B', 5);
+            pause(0.5);
+            brick.MoveMotor('A', 10);
         end
-
-        disp("Both are hitting wall now");
+        
+        brick.StopMotor('A');
+        brick.StopMotor('B');
+        
+        pause(1.5);
+    %Otherwise, A is touching the wall
+    else
+        disp("B side isn't touching, but A is");
+        while brick.TouchPressed(1) == 0
+            brick.MoveMotor('A', 5);
+            pause(0.5);
+            brick.MoveMotor('B', 10);
+        end
+        
+        brick.StopMotor('A');
+        brick.StopMotor('B');
+        
+        pause(1.5);
     end
+    
+    disp("Both are hitting wall now");
     
     brick.StopMotor('A');
     brick.StopMotor('B');
     pause(1.5);
-
+    
     %Moving back a bit
     brick.MoveMotorAngleRel('A', -25, 200, 'Coast');
     brick.MoveMotorAngleRel('B', -25, 200, 'Coast');
-
+    
     pause(2);
-
+    
     %Starting our turn solution
     turnGyro(brick, 90);
 
@@ -112,21 +98,19 @@ while 2 > 1
         %Moving forward step by step, seeing if we hit a nearby wal
         brick.MoveMotorAngleRel('A', 50, 20, 'Coast');
         brick.MoveMotorAngleRel('B', 50, 20, 'Coast');
-        pause(0.3);
-
+        pause(0.1);
+        
         if brick.TouchPressed(1) == 1 || brick.TouchPressed(3) == 1
-            disp("Should be turning now.")
-
             %Moving back a bit
             brick.MoveMotorAngleRel('A', -50, 200, 'Coast');
             brick.MoveMotorAngleRel('B', -50, 200, 'Coast');
-
-            pause(2);
-
+            
+            pause(1);
+            
             turnGyro(brick, 180);
-
+            
             pause(2);
-
+            
             break;
         end
     end
@@ -135,8 +119,6 @@ end
 function turnGyro(brick, degrees)
     %Calibrating gyro
     brick.GyroCalibrate(4);
-    pause(0.5);
-    
     disp(brick.GyroAngle(4));
     
     brick.MoveMotor('A', abs(degrees) / degrees * 50);
@@ -145,7 +127,7 @@ function turnGyro(brick, degrees)
     %This is just going to block until the gyro angle error reaches a good
     %accuracy
     while abs(brick.GyroAngle(4) - degrees) > 10
-        disp(abs(brick.GyroAngle(4) - degrees));
+        %disp(abs(brick.GyroAngle(4) - degrees));
     end
     
     brick.StopMotor('A', 'Brake');
