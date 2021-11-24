@@ -18,7 +18,7 @@ while 1
                 if (distance > 15)
 
                     brick.MoveMotor('A', 50);
-                    brick.MoveMotor('B', 50);
+                    brick.MoveMotor('B', 47);
                     numRightTurns = 0;
                     numLeftTurns = 0;
 
@@ -43,4 +43,3 @@ while 1
 
         end
     end
-    

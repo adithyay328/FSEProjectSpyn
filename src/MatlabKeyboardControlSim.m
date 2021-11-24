@@ -34,10 +34,10 @@ while 1
     switch key
         case 'uparrow'
             disp("Up Arrow pressed!");
-            %brick.MoveMotor('A', 50);
-            %brick.MoveMotor('B', 50);
-            leftMotor.Speed = 10;
-            rightMotor.Speed = 10;
+            brick.MoveMotor('A', 50);
+            brick.MoveMotor('B', 50);
+            %leftMotor.Speed = 10;
+            %rightMotor.Speed = 10;
         case 'downarrow'
             disp("Down Arrow Pressed!");
             brick.MoveMotor('A', -50);

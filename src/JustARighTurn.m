@@ -1,54 +1,46 @@
-theoreticalDegreesTurned = 0;
-actualDegreesTurned = 0;
+while 2 > 1
+    if brick.UltrasonicDist(3) <= 20
+        brick.StopMotor('A');
+        brick.StopMotor('B');
+        pause(1.5);
 
-for i = 1:4
-    
-    
-    [theoreticalDegreesTurned, actualDegreesTurned] = turn(brick, 90, theoreticalDegreesTurned, actualDegreesTurned);
-    
-    
-end
-
-
-function [theoryTotal, actualTotal] = turn(brick, degrees, theoryTotal, actualTotal)
-    %Calibrating gyro
-    brick.GyroCalibrate(4);
-    brick.GyroAngle(4);
-    
-    %Updating our record of how far we've turned in total so far
-    theoryTotal = theoryTotal + degrees;
-    disp("Theory Total: " + theoryTotal);
-    
-    turnRaw(brick, degrees);
-    
-    currentGyroAngle = brick.GyroAngle(4);
-    
-    %Updating our record of how far we've actually turned
-    actualTotal = actualTotal + currentGyroAngle;
-    
-    %Figuring out how much error we have
-    errorAngle = theoryTotal - actualTotal;
-    disp("Error Angle" + errorAngle);
-    
-    if abs(errorAngle) > 4
-        %Calibrating gyro
-        brick.GyroCalibrate(4);
-        brick.GyroAngle(4);
-    
-        turnRaw(brick, errorAngle);
+        turnGyro(brick, 90);
         
-        actualTotal = actualTotal + brick.GyroAngle(4);
+        pause(1.5);
+        
+        if brick.UltrasonicDist(3) <= 50
+            turnGyro(brick, 180);
+            
+            pause(1.5);
+        end
+    else
+        brick.MoveMotor('A', 50);
+        brick.MoveMotor('B', 50);
     end
 end
 
-function turnRaw(brick, degrees)
-    workingDegrees = degrees * 0.9;
+function turnGyro(brick, degrees)
+    %Calibrating gyro
+    brick.GyroCalibrate(4);
+    disp(brick.GyroAngle(4));
     
-    baseSpeed = degrees / -6;
+    brick.MoveMotor('A', abs(degrees) / degrees * 50);
+    brick.MoveMotor('B', -1 * abs(degrees) / degrees * 50);
     
-    brick.MoveMotorAngleRel('A', baseSpeed * (workingDegrees / abs(workingDegrees)) , ( workingDegrees * 2 ), 'Brake');
-    brick.MoveMotorAngleRel('B', -1 * baseSpeed * (workingDegrees / abs(workingDegrees)) , ( workingDegrees * 2), 'Brake');
+    %This is just going to block until the gyro angle error reaches a good
+    %accuracy
+    while abs(brick.GyroAngle(4) - degrees) > 10
+        %disp(abs(brick.GyroAngle(4) - degrees));
+    end
     
-    pause(4);
-    disp("Pause time: " + abs(degrees) / 180 * 5);
+    brick.StopMotor('A', 'Brake');
+    brick.StopMotor('B', 'Brake');
+    
+    pause(0.5);
+    
+    turnAngle = brick.GyroAngle(4) * 0.08;
+    disp(turnAngle);
+    
+    brick.MoveMotorAngleRel('A', -40, turnAngle, 'Brake');
+    brick.MoveMotorAngleRel('B', 40, turnAngle, 'Brake');
 end
